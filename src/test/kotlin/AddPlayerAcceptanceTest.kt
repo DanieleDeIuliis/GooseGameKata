@@ -10,7 +10,7 @@ class AddPlayerAcceptanceTest {
 
     @BeforeEach
     fun setUp() {
-        app = GooseGameApp(outputPrinter, InMemoryPlayer())
+        app = GooseGameApp(outputPrinter, CommandFactory(InMemoryPlayer()))
     }
 
     @Test

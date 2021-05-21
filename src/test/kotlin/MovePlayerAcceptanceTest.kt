@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 class MovePlayerAcceptanceTest {
 
     private val outputPrinter: OutputPrinter = mockk(relaxed = true)
-    private val app =  GooseGameApp(outputPrinter, InMemoryPlayer())
+    private val app =  GooseGameApp(outputPrinter, CommandFactory(InMemoryPlayer()))
 
     @Test
     fun `move a player from start position`() {

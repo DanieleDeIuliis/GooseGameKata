@@ -10,7 +10,7 @@ class GooseGameAppTest {
     @Test
     fun `add player`() {
         val repository = mockk<PlayerRepository>(relaxed = true)
-        val app = GooseGameApp(outputPrinter, repository)
+        val app = GooseGameApp(outputPrinter, CommandFactory(repository))
         every { repository.all() } returns listOf("Pluto")
         every { repository.add("Pluto") } returns true
 
@@ -22,7 +22,7 @@ class GooseGameAppTest {
     @Test
     fun `add two player`() {
         val repository = mockk<PlayerRepository>(relaxed = true)
-        val app = GooseGameApp(outputPrinter, repository)
+        val app = GooseGameApp(outputPrinter, CommandFactory(repository))
         every { repository.all() } returns listOf("Pluto, Pippo")
         every { repository.add(any()) } returns true
 
@@ -35,7 +35,7 @@ class GooseGameAppTest {
     @Test
     fun `add player already exist`() {
         val playerRepository = mockk<PlayerRepository>()
-        val app = GooseGameApp(outputPrinter, playerRepository)
+        val app = GooseGameApp(outputPrinter, CommandFactory(playerRepository))
 
         every { playerRepository.add("Pluto") } returns false
 
@@ -47,7 +47,7 @@ class GooseGameAppTest {
     @Test
     fun `move a player from start position`() {
         val playerRepository = mockk<PlayerRepository>()
-        val app = GooseGameApp(outputPrinter, playerRepository)
+        val app = GooseGameApp(outputPrinter, CommandFactory(playerRepository))
 
         app.exec("move Paperino 4, 2")
 

@@ -1,7 +1,7 @@
-class GooseGameApp(private val outputStream: OutputPrinter, private val playerRepository: PlayerRepository) {
+class GooseGameApp(private val outputStream: OutputPrinter, private val commandFactory: CommandFactory) {
 
     fun exec(command: String) {
-        val str = CommandFactory().build(command, playerRepository).exec()
+        val str = commandFactory.build(command).exec()
         outputStream.printLine(str)
     }
 
