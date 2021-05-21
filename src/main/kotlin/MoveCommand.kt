@@ -1,13 +1,14 @@
-class MoveCommand(
-    private val repository: PlayerPositionRepository, private val commandData: MoveCommandData): Command {
+class MoveCommand(private val repository: PlayerPositionRepository, private val commandData: MoveCommandData) : Command {
     override fun exec(): String {
-        val startingPosition = repository.positionOf(commandData.playerName)
-        val finalPosition = commandData.firstDiceRoll + commandData.secondDiceRoll + startingPosition
-        repository.updatePositionOf(commandData.playerName, finalPosition)
-        return if(startingPosition == 0) {
-            "${commandData.playerName} rolls, ${commandData.firstDiceRoll}, ${commandData.secondDiceRoll}. ${commandData.playerName} moves from Start to $finalPosition"
-        } else {
-            "${commandData.playerName} rolls, ${commandData.firstDiceRoll}, ${commandData.secondDiceRoll}. ${commandData.playerName} moves from $startingPosition to $finalPosition"
+        commandData.apply {
+            val startingPosition = repository.positionOf(playerName)
+            val finalPosition = firstDiceRoll + secondDiceRoll + startingPosition
+            repository.updatePositionOf(playerName, finalPosition)
+
+            return "$playerName rolls, $firstDiceRoll, $secondDiceRoll. " +
+                    "$playerName moves from ${startingPosition.toStartString()} to $finalPosition"
         }
     }
+
+    private fun Int.toStartString(): String = if (this == 0) "Start" else this.toString()
 }
