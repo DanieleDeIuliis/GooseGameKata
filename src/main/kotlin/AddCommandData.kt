@@ -1,0 +1,1 @@
+data class AddCommandData(val playerName: String)

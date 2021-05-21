@@ -1,16 +1,13 @@
-class MoveCommand(private val command: String, private val repository: PlayerPositionRepository): Command {
+class MoveCommand(
+    private val repository: PlayerPositionRepository, private val commandData: MoveCommandData): Command {
     override fun exec(): String {
-        val nameAndDiceResults = command.split("move").last().trim().split(" ")
-        val playerName = nameAndDiceResults.first()
-        val firstRoll = nameAndDiceResults[1].trim(',')
-        val secondRoll = nameAndDiceResults[2]
-        val startingPosition = repository.positionOf(playerName)
-        val finalPosition = firstRoll.toInt() + secondRoll.toInt() + startingPosition
-        repository.updatePositionOf(playerName, finalPosition)
-        if(startingPosition == 0) {
-            return "$playerName rolls, $firstRoll, $secondRoll. $playerName moves from Start to $finalPosition"
+        val startingPosition = repository.positionOf(commandData.playerName)
+        val finalPosition = commandData.firstDiceRoll + commandData.secondDiceRoll + startingPosition
+        repository.updatePositionOf(commandData.playerName, finalPosition)
+        return if(startingPosition == 0) {
+            "${commandData.playerName} rolls, ${commandData.firstDiceRoll}, ${commandData.secondDiceRoll}. ${commandData.playerName} moves from Start to $finalPosition"
         } else {
-            return "$playerName rolls, $firstRoll, $secondRoll. $playerName moves from $startingPosition to $finalPosition"
+            "${commandData.playerName} rolls, ${commandData.firstDiceRoll}, ${commandData.secondDiceRoll}. ${commandData.playerName} moves from $startingPosition to $finalPosition"
         }
     }
 }

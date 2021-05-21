@@ -8,7 +8,7 @@ class AddCommandTest {
     @Test
     fun `add player`() {
         val repository = mockk<PlayerNameRepository>(relaxed = true)
-        val app = AddCommand("add player Pluto", repository)
+        val app = AddCommand(repository, AddCommandData("Pluto"))
         every { repository.all() } returns listOf("Pluto")
         every { repository.add("Pluto") } returns true
 
@@ -20,7 +20,7 @@ class AddCommandTest {
     @Test
     fun `add two player`() {
         val repository = mockk<PlayerNameRepository>(relaxed = true)
-        val app = AddCommand("add player Pippo", repository)
+        val app = AddCommand(repository, AddCommandData("Pippo"))
         every { repository.all() } returns listOf("Pluto, Pippo")
         every { repository.add(any()) } returns true
 
@@ -32,7 +32,7 @@ class AddCommandTest {
     @Test
     fun `add player already exist`() {
         val repository = mockk<PlayerNameRepository>(relaxed = true)
-        val app = AddCommand("add player Pluto", repository)
+        val app = AddCommand(repository, AddCommandData("Pluto"))
 
         every { repository.add("Pluto") } returns false
 

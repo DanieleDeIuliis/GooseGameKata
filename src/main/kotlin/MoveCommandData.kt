@@ -1,0 +1,1 @@
+data class MoveCommandData(val playerName: String, val firstDiceRoll: Int, val secondDiceRoll: Int)

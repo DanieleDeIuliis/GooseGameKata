@@ -9,7 +9,7 @@ class MoveCommandTest {
     @Test
     fun `move a player from start position`() {
         val repository: PlayerPositionRepository = mockk(relaxed = true)
-        val app = MoveCommand("move Paperino 4, 2", repository)
+        val app = MoveCommand(repository, MoveCommandData("Paperino", 4,2))
         every { repository.positionOf("Paperino") } returns 0
 
         val result = app.exec()
@@ -20,7 +20,7 @@ class MoveCommandTest {
     @Test
     fun `move a player twice from start position`() {
         val repository: PlayerPositionRepository = mockk(relaxed = true)
-        val app = MoveCommand("move Paperino 4, 2", repository)
+        val app = MoveCommand(repository, MoveCommandData("Paperino", 4, 2))
         every { repository.positionOf("Paperino") } returns 8
 
         val result = app.exec()
