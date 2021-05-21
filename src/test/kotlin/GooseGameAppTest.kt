@@ -43,4 +43,14 @@ class GooseGameAppTest {
 
         verify { outputPrinter.printLine("Pluto: already existing player") }
     }
+
+    @Test
+    fun `move a player from start position`() {
+        val playerRepository = mockk<PlayerRepository>()
+        val app = GooseGameApp(outputPrinter, playerRepository)
+
+        app.exec("move Paperino 4, 2")
+
+        verify { outputPrinter.printLine("Paperino rolls, 4, 2. Paperino moves from Start to 6") }
+    }
 }
