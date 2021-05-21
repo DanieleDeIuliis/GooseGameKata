@@ -16,12 +16,12 @@ class InMemoryPlayer: PlayerRepository {
     }
 
     override fun updatePositionOf(player: String, position: Int) {
-        TODO("Not yet implemented")
+        players.single { p -> p.name == player }.position = position
     }
 
     override fun positionOf(player: String): Int {
         return players.single { p -> p.name == player }.position
     }
 
-    data class Player(val name: String, val position: Int)
+    data class Player(val name: String, var position: Int)
 }
