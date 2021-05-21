@@ -1,11 +1,11 @@
+import java.lang.StringBuilder
+
 class MoveCommand(private val repository: PlayerPositionRepository, private val commandData: MoveCommandData) :
     Command {
     override fun exec(): String {
-        commandData.apply {
-            val movement = movePlayer()
-            repository.updatePositionOf(playerName, movement.finalPosition)
-            return message(movement)
-        }
+        val movement = movePlayer()
+        repository.updatePositionOf(commandData.playerName, movement.finalPosition)
+        return message(movement)
     }
 
     private fun movePlayer(): Movement {
@@ -20,20 +20,27 @@ class MoveCommand(private val repository: PlayerPositionRepository, private val 
     }
 
     private fun message(movement: Movement): String {
-        commandData.apply {
-            var message = "$playerName rolls $firstDiceRoll, $secondDiceRoll. "
+        return "${commandData.playerName} rolls ${commandData.firstDiceRoll}, ${commandData.secondDiceRoll}. " +
+                "${commandData.playerName} moves from ${movement.startingPosition.toStartString()} to"
+                    .handleBounce(movement.bounced)
+                    .addFinalPosition(movement.finalPosition)
+                    .handleVictory(movement.finalPosition)
+    }
 
-            message += if(movement.bounced > 0) {
-                "$playerName moves from ${movement.startingPosition.toStartString()} to 63. $playerName bounces! $playerName returns to ${movement.finalPosition}"
-            } else {
-                "$playerName moves from ${movement.startingPosition.toStartString()} to ${movement.finalPosition}"
-            }
-
-            if (movement.finalPosition == 63) {
-                message += ". $playerName Wins!!"
-            }
-            return message
+    private fun String.handleBounce(bounced: Int): String {
+        if(bounced > 0) {
+            return this + " 63. ${commandData.playerName} bounces! ${commandData.playerName} returns to"
         }
+        return this
+    }
+
+    private fun String.addFinalPosition(finalPosition: Int): String = "$this $finalPosition"
+
+    private fun String.handleVictory(finalPosition: Int): String {
+        if(finalPosition == 63) {
+            return this + ". ${commandData.playerName} Wins!!"
+        }
+        return this
     }
 
     private fun Int.toStartString(): String = if (this == 0) "Start" else this.toString()
