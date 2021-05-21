@@ -6,51 +6,17 @@ import org.junit.jupiter.api.Test
 class GooseGameAppTest {
 
     private val outputPrinter: OutputPrinter = mockk(relaxed = true)
+    private val commandFactory: CommandFactory = mockk()
+    private val command: Command = mockk()
 
     @Test
-    fun `add player`() {
-        val repository = mockk<PlayerRepository>(relaxed = true)
-        val app = GooseGameApp(outputPrinter, CommandFactory(repository))
-        every { repository.all() } returns listOf("Pluto")
-        every { repository.add("Pluto") } returns true
+    fun `execute a command`() {
+        val app = GooseGameApp(outputPrinter, commandFactory)
+        every { commandFactory.build(any()) } returns command
+        every { command.exec() } returns "a command has been executed."
 
-        app.exec("add player Pluto")
+        app.exec("aCommand")
 
-        verify { outputPrinter.printLine("Players: Pluto") }
-    }
-
-    @Test
-    fun `add two player`() {
-        val repository = mockk<PlayerRepository>(relaxed = true)
-        val app = GooseGameApp(outputPrinter, CommandFactory(repository))
-        every { repository.all() } returns listOf("Pluto, Pippo")
-        every { repository.add(any()) } returns true
-
-        app.exec("add player Pluto")
-        app.exec("add player Pippo")
-
-        verify { outputPrinter.printLine("Players: Pluto, Pippo") }
-    }
-
-    @Test
-    fun `add player already exist`() {
-        val playerRepository = mockk<PlayerRepository>()
-        val app = GooseGameApp(outputPrinter, CommandFactory(playerRepository))
-
-        every { playerRepository.add("Pluto") } returns false
-
-        app.exec("add player Pluto")
-
-        verify { outputPrinter.printLine("Pluto: already existing player") }
-    }
-
-    @Test
-    fun `move a player from start position`() {
-        val playerRepository = mockk<PlayerRepository>()
-        val app = GooseGameApp(outputPrinter, CommandFactory(playerRepository))
-
-        app.exec("move Paperino 4, 2")
-
-        verify { outputPrinter.printLine("Paperino rolls, 4, 2. Paperino moves from Start to 6") }
+        verify { outputPrinter.printLine("a command has been executed.") }
     }
 }
