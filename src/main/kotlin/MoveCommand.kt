@@ -2,30 +2,34 @@ class MoveCommand(private val repository: PlayerPositionRepository, private val 
     Command {
     override fun exec(): String {
         commandData.apply {
-            val startingPosition = repository.positionOf(playerName)
-            val finalPosition = firstDiceRoll + secondDiceRoll + startingPosition
-            if(finalPosition > 63) {
-                val newFinalPosition = 63 - (finalPosition - 63)
-                repository.updatePositionOf(playerName, newFinalPosition)
-                return message(startingPosition, newFinalPosition, true)
-            } else {
-                repository.updatePositionOf(playerName, finalPosition)
-                return message(startingPosition, finalPosition)
-            }
+            val movement = movePlayer()
+            repository.updatePositionOf(playerName, movement.finalPosition)
+            return message(movement)
         }
     }
 
-    private fun message(startingPosition: Int, finalPosition: Int, hasBouncedBack: Boolean = false): String {
+    private fun movePlayer(): Movement {
+        val startingPosition = repository.positionOf(commandData.playerName)
+        var finalPosition = commandData.firstDiceRoll + commandData.secondDiceRoll + startingPosition
+        var bouncedBack = 0
+        if(finalPosition > 63) {
+            bouncedBack = finalPosition - 63
+            finalPosition = 63 - bouncedBack
+        }
+        return Movement(startingPosition, finalPosition, bouncedBack)
+    }
+
+    private fun message(movement: Movement): String {
         commandData.apply {
             var message = "$playerName rolls $firstDiceRoll, $secondDiceRoll. "
 
-            message += if(hasBouncedBack) {
-                "$playerName moves from ${startingPosition.toStartString()} to 63. $playerName bounces! $playerName returns to $finalPosition"
+            message += if(movement.bounced > 0) {
+                "$playerName moves from ${movement.startingPosition.toStartString()} to 63. $playerName bounces! $playerName returns to ${movement.finalPosition}"
             } else {
-                "$playerName moves from ${startingPosition.toStartString()} to $finalPosition"
+                "$playerName moves from ${movement.startingPosition.toStartString()} to ${movement.finalPosition}"
             }
 
-            if (finalPosition == 63) {
+            if (movement.finalPosition == 63) {
                 message += ". $playerName Wins!!"
             }
             return message
@@ -34,3 +38,5 @@ class MoveCommand(private val repository: PlayerPositionRepository, private val 
 
     private fun Int.toStartString(): String = if (this == 0) "Start" else this.toString()
 }
+
+data class Movement(val startingPosition: Int, val finalPosition: Int, val bounced: Int)
