@@ -1,17 +1,20 @@
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-@Disabled
 class AddPlayerAcceptanceTest {
 
     private val outputPrinter: OutputPrinter = mockk(relaxed = true)
+    private lateinit var app: GooseGameApp
+
+    @BeforeEach
+    fun setUp() {
+        app = GooseGameApp(outputPrinter, InMemoryPlayer())
+    }
 
     @Test
     fun `add players`() {
-        val repository = InMemoryPlayer()
-        val app = GooseGameApp(outputStream = outputPrinter, mockk())
         app.exec("add player Pippo")
         app.exec("add player Pluto")
         app.exec("add player Paperino")
@@ -23,7 +26,6 @@ class AddPlayerAcceptanceTest {
 
     @Test
     fun `player already exists`() {
-        val app = GooseGameApp(outputStream = outputPrinter, mockk())
         app.exec("add player Pluto")
         app.exec("add player Pluto")
 
