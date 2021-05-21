@@ -1,8 +1,8 @@
-class AddCommand(private val command: String, private val playerRepository: PlayerRepository) : Command {
+class AddCommand(private val command: String, private val playerNameRepository: PlayerNameRepository) : Command {
     override fun exec(): String {
         val playerName = command.split(" ").last()
-        return if(playerRepository.add(playerName)) {
-            "Players: ${playerRepository.all().joinToString(", ")}"
+        return if(playerNameRepository.add(playerName)) {
+            "Players: ${playerNameRepository.all().joinToString(", ")}"
         } else {
             "$playerName: already existing player"
         }

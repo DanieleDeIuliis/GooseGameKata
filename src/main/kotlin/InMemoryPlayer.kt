@@ -13,4 +13,12 @@ class InMemoryPlayer: PlayerRepository {
     override fun all(): List<String> {
         return players
     }
+
+    override fun updatePositionOf(player: String, position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun positionOf(player: String): Int {
+        TODO("Not yet implemented")
+    }
 }
