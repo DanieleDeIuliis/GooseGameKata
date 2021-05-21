@@ -15,12 +15,12 @@ class InMemoryPlayer: PlayerRepository {
         return players.map { it.name }
     }
 
-    override fun updatePositionOf(player: String, position: Int) {
-        players.single { p -> p.name == player }.position = position
+    override fun updatePositionOf(playerName: String, position: Int) {
+        players.single { p -> p.name == playerName }.position = position
     }
 
-    override fun positionOf(player: String): Int {
-        return players.single { p -> p.name == player }.position
+    override fun positionOf(playerName: String): Int {
+        return players.single { p -> p.name == playerName }.position
     }
 
     data class Player(val name: String, var position: Int)
