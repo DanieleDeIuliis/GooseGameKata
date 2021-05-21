@@ -14,7 +14,7 @@ class MoveCommandTest {
 
         val result = app.exec()
 
-        assertThat(result).isEqualTo("Paperino rolls, 4, 2. Paperino moves from Start to 6")
+        assertThat(result).isEqualTo("Paperino rolls 4, 2. Paperino moves from Start to 6")
     }
 
     @Test
@@ -26,6 +26,18 @@ class MoveCommandTest {
         val result = app.exec()
 
         verify { repository.updatePositionOf("Paperino", 14) }
-        assertThat(result).isEqualTo("Paperino rolls, 4, 2. Paperino moves from 8 to 14")
+        assertThat(result).isEqualTo("Paperino rolls 4, 2. Paperino moves from 8 to 14")
+    }
+
+    @Test
+    fun `player wins`() {
+        val repository: PlayerPositionRepository = mockk(relaxed = true)
+        val app = MoveCommand(repository, MoveCommandData("Paperino", 2, 2))
+        every { repository.positionOf("Paperino") } returns 59
+
+        val result = app.exec()
+
+        verify { repository.updatePositionOf("Paperino", 63) }
+        assertThat(result).isEqualTo("Paperino rolls 2, 2. Paperino moves from 59 to 63. Paperino Wins!!")
     }
 }

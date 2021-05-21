@@ -5,8 +5,10 @@ class MoveCommand(private val repository: PlayerPositionRepository, private val 
             val finalPosition = firstDiceRoll + secondDiceRoll + startingPosition
             repository.updatePositionOf(playerName, finalPosition)
 
-            return "$playerName rolls, $firstDiceRoll, $secondDiceRoll. " +
+            val message = "$playerName rolls $firstDiceRoll, $secondDiceRoll. " +
                     "$playerName moves from ${startingPosition.toStartString()} to $finalPosition"
+
+            return if(finalPosition == 63) "$message. $playerName Wins!!" else message
         }
     }
 
