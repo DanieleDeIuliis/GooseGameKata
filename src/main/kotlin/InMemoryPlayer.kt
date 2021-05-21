@@ -1,12 +1,14 @@
 class InMemoryPlayer: PlayerRepository {
 
     private val players = mutableListOf<String>()
+    private val players2 = mutableListOf<Player>()
 
-    override fun add(player: String): Boolean {
-        if(players.contains(player)) {
+    override fun add(playerName: String): Boolean {
+        if(players.contains(playerName)) {
             return false
         }
-        players.add(player)
+        players.add(playerName)
+        players2.add(Player(playerName, 0))
         return true
     }
 
@@ -19,6 +21,8 @@ class InMemoryPlayer: PlayerRepository {
     }
 
     override fun positionOf(player: String): Int {
-        TODO("Not yet implemented")
+        return players2.single { p -> p.name == player }.position
     }
+
+    data class Player(val name: String, val position: Int)
 }

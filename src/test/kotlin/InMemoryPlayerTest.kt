@@ -26,4 +26,14 @@ class InMemoryPlayerTest {
 
         assertThat(repository.all()).isEqualTo(listOf("aPlayerName", "aPlayerName2"))
     }
+
+    @Test
+    fun `get a new player's current position`() {
+        val repository = InMemoryPlayer()
+
+        repository.add("Player")
+        val result = repository.positionOf("Player")
+
+        assertThat(result).isEqualTo(0)
+    }
 }
