@@ -4,10 +4,14 @@ class GooseGameApp(private val outputStream: OutputPrinter) {
 
     fun exec(command: String) {
         if(command.contains("add")) {
-            val palyerName = command.split(" ").last()
-            players.add(palyerName)
-            outputStream.printLine("Players: ${players.joinToString(", ")}")
+            addPlayer(command)
         }
+    }
+
+    private fun addPlayer(command: String) {
+        val playerName = command.split(" ").last()
+        players.add(playerName)
+        outputStream.printLine("Players: ${players.joinToString(", ")}")
     }
 
 }
