@@ -8,14 +8,16 @@ class CommandFactory(private val playerNameRepository: PlayerRepository, private
     }
 
     private fun buildMoveData(command: String): MoveCommandData {
-        val playerName = command.replace("move ", "").split(" ").first()
+        val playerName = getPlayerNameFrom(command)
         val rolls = diceRoller.roll()
         return MoveCommandData(playerName, rolls.first, rolls.second)
     }
 
     private fun buildAddData(command: String): AddCommandData {
-        val playerName = command.split(" ").last()
+        val playerName = getPlayerNameFrom(command)
         return AddCommandData(playerName)
     }
+
+    private fun getPlayerNameFrom(command: String) = command.split(" ").last()
 }
 

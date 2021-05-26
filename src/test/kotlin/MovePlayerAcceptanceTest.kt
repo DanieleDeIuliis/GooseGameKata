@@ -43,7 +43,7 @@ class MovePlayerAcceptanceTest {
         app.exec("add player Paperino")
 
         repeat(6) { app.exec("move Paperino") }
-        app.exec("move Paperino 4, 2")
+        app.exec("move Paperino")
 
         verify { outputPrinter.printLine("Paperino rolls 4, 2. Paperino moves from 60 to 63. Paperino bounces! Paperino returns to 60") }
     }
