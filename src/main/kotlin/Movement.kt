@@ -1,1 +1,1 @@
-data class Movement(val startingPosition: Int, val finalPosition: Int, val bounced: Int)
+data class Movement(val startingPosition: Int, val finalPosition: Int, val bounced: Int, val bridgeTaken: Boolean)

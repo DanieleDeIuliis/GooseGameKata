@@ -1,6 +1,7 @@
 class MessageBuilder(private val movement: Movement, private val commandData: MoveCommandData) {
     fun build(): String {
         return  messageInit(movement.startingPosition)
+            .handleBridge()
             .handleBounce(movement.bounced)
             .addFinalPosition(movement.finalPosition)
             .handleVictory(movement.finalPosition)
@@ -9,6 +10,13 @@ class MessageBuilder(private val movement: Movement, private val commandData: Mo
     private fun messageInit(startingPosition: Int): String {
         return "${commandData.playerName} rolls ${commandData.firstDiceRoll}, ${commandData.secondDiceRoll}. " +
                 "${commandData.playerName} moves from ${startingPosition.toStartString()} to"
+    }
+
+    private fun String.handleBridge(): String {
+        if(movement.bridgeTaken) {
+            return this + " The Bridge. ${commandData.playerName} jumps to"
+        }
+        return this
     }
 
     private fun String.handleBounce(bounced: Int): String {
