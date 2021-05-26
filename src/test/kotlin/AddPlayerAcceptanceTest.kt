@@ -6,11 +6,12 @@ import org.junit.jupiter.api.Test
 class AddPlayerAcceptanceTest {
 
     private val outputPrinter: OutputPrinter = mockk(relaxed = true)
+    private val diceRoller: DiceRoller = mockk(relaxed = true)
     private lateinit var app: GooseGameApp
 
     @BeforeEach
     fun setUp() {
-        app = GooseGameApp(outputPrinter, CommandFactory(InMemoryPlayer()))
+        app = GooseGameApp(outputPrinter, CommandFactory(InMemoryPlayer(), diceRoller))
     }
 
     @Test

@@ -1,4 +1,4 @@
-class CommandFactory(private val playerNameRepository: PlayerRepository)  {
+class CommandFactory(private val playerNameRepository: PlayerRepository, private val diceRoller: DiceRoller)  {
     fun build(command: String): Command {
         return when(command.split(" ").first()) {
             "add" -> AddCommand(playerNameRepository, buildAddData(command))
@@ -9,9 +9,8 @@ class CommandFactory(private val playerNameRepository: PlayerRepository)  {
 
     private fun buildMoveData(command: String): MoveCommandData {
         val playerName = command.replace("move ", "").split(" ").first()
-        val firstDiceRoll = command.replace("move ", "").split(" ")[1].replace(",", "").toInt()
-        val secondDiceRoll = command.replace("move ", "").split(" ")[2].toInt()
-        return MoveCommandData(playerName, firstDiceRoll, secondDiceRoll)
+        val rolls = diceRoller.roll()
+        return MoveCommandData(playerName, rolls.first, rolls.second)
     }
 
     private fun buildAddData(command: String): AddCommandData {
