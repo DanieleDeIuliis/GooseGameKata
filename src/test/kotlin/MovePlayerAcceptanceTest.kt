@@ -47,4 +47,14 @@ class MovePlayerAcceptanceTest {
 
         verify { outputPrinter.printLine("Paperino rolls 4, 2. Paperino moves from 60 to 63. Paperino bounces! Paperino returns to 60") }
     }
+
+    @Test
+    fun `player ends up on a goose cell and double its movement`() {
+        every { diceRoller.roll() } returns Rolls(2, 3)
+        app.exec("add player Paperino")
+
+        app.exec("move Paperino")
+
+        verify { outputPrinter.printLine("Paperino rolls 2, 3. Paperino moves from Start to 5, The Goose. Paperino moves again and goes to 10") }
+    }
 }
